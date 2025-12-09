@@ -1,0 +1,5 @@
+zenoh_ros2_bridge:
+  ros__parameters:
+    active_robots:
+      - "turtle3"
+      - "turtle5"
