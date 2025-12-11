@@ -2,17 +2,22 @@
 
 
 ## Usage
-### Building an image
 ```bash
-podman build -t lampa_bridge .
+podman run -it --network=host ghcr.io/jure-d/zenoh_ros2_bridge:latest
 ```
 
-### Running
+### Developemnt
+#### Building
 ```bash
-podman run -it --network=host lampa_bridge:latest
+podman build -t zenoh_ros2_bridge .
 ```
 
-### All at once
+#### Running
 ```bash
-podman build -t lampa_bridge . && podman run -it --network=host lampa_bridge:latest
+podman run -it --network=host zenoh_ros2_bridge:latest
+```
+
+#### Build and run
+```bash
+podman build -t zenoh_ros2_bridge . && podman run -it --network=host zenoh_ros2_bridge:latest
 ```

@@ -1,7 +1,9 @@
 FROM ros:jazzy-ros-base
 
-RUN apt-get update && apt-get install --no-install-recommends -y \
-    python3-pip python3-venv
+RUN apt-get update && apt-get upgrade -y && apt-get install --no-install-recommends -y \
+    python3-pip \
+    python3-venv && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /ros2_ws
 
@@ -13,20 +15,24 @@ RUN python3 -m venv --system-site-packages /ros2_ws/venv \
  && touch /ros2_ws/venv/COLCON_IGNORE
 
 RUN bash -c "\
+    apt-get update && \
     source /opt/ros/jazzy/setup.bash && \
     source /ros2_ws/venv/bin/activate && \
     pip install --upgrade pip msgpack eclipse-zenoh && \
     rosdep install --from-paths src --ignore-src -r -y && \
-    PYTHON_EXECUTABLE=/ros2_ws/venv/bin/python colcon build --symlink-install \
+    PYTHON_EXECUTABLE=/ros2_ws/venv/bin/python colcon build --symlink-install && \
+    rm -rf /var/lib/apt/lists/* \
 "
 
 # --- Install your main project ---
 COPY ./src/ /ros2_ws/src/
 
 RUN bash -c "\
+    apt-get update && \
     source /opt/ros/jazzy/setup.bash && \
     source install/setup.bash && \
-    colcon build --symlink-install --packages-select zenoh_ros2_bridge \
+    colcon build --symlink-install --packages-select zenoh_ros2_bridge && \
+    rm -rf /var/lib/apt/lists/* \
 "
 
 COPY ./ros_entrypoint.sh /ros_entrypoint.sh
